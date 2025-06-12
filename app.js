@@ -8,8 +8,8 @@ const ingredientsThumbnails = document.getElementById('ingredients-thumbnails');
 
 // Fetch cocktails from the API
 async function fetchCocktails() {
-    const coctails = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=m');
-    const data = await coctails.json();
+    const cocktails = await fetch('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=m');
+    const data = await cocktails.json();
     displayCocktails(data.drinks);
 }
 
@@ -30,6 +30,43 @@ function displayCocktails(drinks) {
         card.onclick = () => showDetails(drink);
         listSection.appendChild(card);
     });
+}
+
+// Show cocktail detail
+function showDetails(drink) {
+    listSection.classList.add('hidden');
+    detailSection.classList.remove('hidden');
+
+    detailTitle.textContent = drink.strDrink;
+    detailImg.src = drink.strDrinkThumb || 'https://via.placeholder.com/300x300?text=No+Image';
+    detailImg.alt = drink.strDrink;
+
+    glassType.textContent = drink.strGlass || 'N/A';
+    ingredientsList.innerHTML = '';
+    ingredientsThumbnails.innerHTML = '';
+
+    for (let i = 1; i <= 15; i++) {
+        const ingredient = drink[`strIngredient${i}`];
+        const measure = drink[`strMeasure${i}`];
+
+        if (ingredient) {
+            const li = document.createElement('li');
+            li.textContent = `${measure || ''} ${ingredient}`;
+            ingredientsList.appendChild(li);
+
+            const thumb = document.createElement('img');
+            thumb.src = `https://www.thecocktaildb.com/images/ingredients/${ingredient}-Small.png`;
+            thumb.alt = ingredient;
+            thumb.className = 'h-16';
+            ingredientsThumbnails.appendChild(thumb);
+        }
+    }
+}
+
+// Back button to cocktail list
+function backToList() {
+    detailSection.classList.add('hidden');
+    listSection.classList.remove('hidden');
 }
 
 // Load on page start
