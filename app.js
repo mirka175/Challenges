@@ -20,25 +20,25 @@ async function fetchCocktails() {
     );
 
     const results = await Promise.all(fetchPromises);
-    const allDrinks = results.flatMap(result => result.drinks || []);
-    displayCocktails(allDrinks);
+    const cocktails = results.flatMap(result => result.drinks || []);
+    displayCocktails(cocktails);
 }
 
 // Display cocktails
-function displayCocktails(drinks) {
+function displayCocktails(cocktails) {
     listSection.innerHTML = '';
-    drinks.forEach((drink) => {
+    cocktails.forEach((cocktail) => {
         const card = document.createElement('div');
         card.className = 'bg-[#5c1d3b] p-4 rounded-lg text-center cursor-pointer hover:bg-[#7a2c54]';
 
-        const imageUrl = drink.strDrinkThumb || 'https://via.placeholder.com/300x300?text=No+Image';
+        const imageUrl = cocktail.strDrinkThumb || 'https://via.placeholder.com/300x300?text=No+Image';
 
         card.innerHTML = `
-            <img src="${imageUrl}" alt="${drink.strDrink}" class="rounded mb-2 w-full" />
-            <p class="text-white font-medium">${drink.strDrink}</p>
+            <img src="${imageUrl}" alt="${cocktail.strDrink}" class="rounded mb-2 w-full" />
+            <p class="text-white font-medium">${cocktail.strDrink}</p>
         `;
 
-        card.onclick = () => showDetails(drink);
+        card.onclick = () => showDetails(cocktail);
         listSection.appendChild(card);
     });
 }
