@@ -8,20 +8,28 @@ const ingredientsThumbnails = document.getElementById('ingredients-thumbnails');
 
 // Fetch cocktails from API
 async function fetchCocktails() {
-    const letters = [
-        'a', 'b', 'c', 'd', 'e', 'f', 'g',
-        'h', 'i', 'j', 'k', 'l', 'm', 'n',
-        'o', 'p', 'q', 'r', 's', 't', 'u',
-        'v', 'w', 'x', 'y', 'z'
-    ];
+    try {
+        const letters = [
+            'a', 'b', 'c', 'd', 'e', 'f', 'g',
+            'h', 'i', 'j', 'k', 'l', 'm', 'n',
+            'o', 'p', 'q', 'r', 's', 't', 'u',
+            'v', 'w', 'x', 'y', 'z'
+        ];
 
-    const fetchPromises = letters.map(letter =>
-        fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`).then(res => res.json())
-    );
+        const fetchPromises = letters.map(letter =>
+            fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${letter}`).then(res => res.json())
+        );
 
-    const results = await Promise.all(fetchPromises);
-    const cocktails = results.flatMap(result => result.drinks || []);
-    displayCocktails(cocktails);
+        const results = await Promise.all(fetchPromises);
+        const cocktails = results.flatMap(result => result.drinks || []);
+        displayCocktails(cocktails);
+    } catch (error) {
+        console.error("Failed to fetch cocktails:", error);
+        listSection.innerHTML = `
+            <p class="text-center w-full col-span-full text-red-300 font-semibold">
+                Sorry, we couldn't load the cocktails. Please try again later.
+            </p>`;
+    }
 }
 
 // Display cocktails
